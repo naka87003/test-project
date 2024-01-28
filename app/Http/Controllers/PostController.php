@@ -40,7 +40,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         Gate::authorize('test');
-        
+
         $validated = $request->validate([
             'title' => 'required|max:20',
             'body' => 'required|max:400'
@@ -51,5 +51,13 @@ class PostController extends Controller
         Post::create($validated);
 
         return back()->with('message', '保存しました');;
+    }
+
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Post $post)
+    {
+        return view('post.show', compact('post'));
     }
 }
