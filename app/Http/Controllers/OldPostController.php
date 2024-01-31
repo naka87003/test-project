@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+
     /**
      * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -17,7 +22,9 @@ class PostController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function create()
     {
@@ -26,9 +33,14 @@ class PostController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        Gate::authorize('test');
+
         $validated = $request->validate([
             'title' => 'required|max:20',
             'body' => 'required|max:400'
@@ -38,11 +50,12 @@ class PostController extends Controller
 
         Post::create($validated);
 
-        return redirect()->route('post.index')->with('message', '保存しました');
+        return back()->with('message', '保存しました');
     }
 
     /**
      * Display the specified resource.
+     * @return \Illuminate\Contracts\View\View
      */
     public function show(Post $post)
     {
@@ -69,7 +82,7 @@ class PostController extends Controller
         $validated['user_id'] = auth()->id();
         $post->update($validated);
 
-        return redirect()->route('post.show', compact('post'))->with('message', '更新しました');
+        return back()->with('message', '更新しました');
     }
 
     /**
@@ -78,6 +91,7 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+
         return redirect()->route('post.index')->with('message', '削除しました');
     }
 }
