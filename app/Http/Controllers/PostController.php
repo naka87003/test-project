@@ -12,7 +12,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('user')->where('user_id', auth()->id())->orderBy('created_at', 'desc')->get();
+        $posts = Post::with('user')->orderBy('created_at', 'desc')->paginate(5);
         return view('post.index', compact('posts'));
     }
 
