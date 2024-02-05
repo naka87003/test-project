@@ -29,11 +29,17 @@
                 <p class="mt-4 whitespace-pre-line">
                     {{ $post->body }}
                 </p>
-                <div class="text-sm font-semibold flex flex-row-reverse">
-                    <p>
-                        {{ $post->created_at }} / {{ $post->user->name ?? '匿名' }}
-                    </p>
-                </div>
+                @if ($post->image)
+                    <div>
+                        (画像ファイル：{{ $post->image }})
+                    </div>
+                    <img src="{{ asset('storage/images/' . $post->image) }}" class="mx-auto" style="height:300px;">
+                    <div class="text-sm font-semibold flex flex-row-reverse">
+                        <p>
+                            {{ $post->created_at }} / {{ $post->user->name ?? '匿名' }}
+                        </p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

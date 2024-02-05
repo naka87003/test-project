@@ -34,6 +34,13 @@ class PostController extends Controller
             'body' => 'required|max:400'
         ]);
 
+
+        if ($request->image) {
+            $name = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move('storage/images', $name);
+            $validated['image'] = $name;
+        }
+
         $validated['user_id'] = auth()->id();
 
         Post::create($validated);
@@ -66,6 +73,13 @@ class PostController extends Controller
             'title' => 'required|max:20',
             'body' => 'required|max:400'
         ]);
+
+        if ($request->image) {
+            $name = $request->file('image')->getClientOriginalName();
+            $request->file('image')->move('storage/images', $name);
+            $validated['image'] = $name;
+        }
+
         $validated['user_id'] = auth()->id();
         $post->update($validated);
 
